@@ -1,4 +1,4 @@
-import { useRouter } from 'expo-router'; // Add this
+import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import HelloCard from '../../components/HelloCard';
@@ -14,7 +14,7 @@ const MOCK_EVENTS = [
 
 export default function Home() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const router = useRouter(); // Initialize router
+  const router = useRouter(); 
   const selectedEvent = MOCK_EVENTS.find(e => e.id === selectedId);
 
   return (
@@ -26,6 +26,7 @@ export default function Home() {
       <FlatList
         data={MOCK_EVENTS}
         keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text>No events available</Text>} 
         renderItem={({ item }) => (
           <Pressable 
             onPress={() => setSelectedId(item.id)}
@@ -37,9 +38,12 @@ export default function Home() {
         )}
       />
 
-      {/* NAVIGATION BUTTON - Required for Session 3 [cite: 120-121] */}
       <Pressable 
-        onPress={() => router.push({ pathname: '/event-home', params: { id: selectedId } })}
+        onPress={() => {
+          if (selectedId) {
+            router.push({ pathname: '/event-home', params: { id: selectedId } });
+          }
+        }}
         style={[styles.navButton, { opacity: selectedId ? 1 : 0.5 }]}
         disabled={!selectedId}
       >
